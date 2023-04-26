@@ -10,14 +10,16 @@ import (
 	"fmt"
 )
 
+// Uploadfile function.
 func UploadFile(uploader *s3manager.Uploader, filePath string, bucketName string, fileName string) error {
+	//To open the file from local system using filepath.
 	file, err := os.Open(filePath)
 	if err != nil {
 		return err
 	}
 
 	defer file.Close()
-
+	//Uploader struct used to upload the files into the bucket.
 	_, err = uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(bucketName),
 		Key:    aws.String(fileName),
@@ -41,15 +43,16 @@ func main() {
 		fmt.Printf("Failed to initialize new session: %v", err)
 		return
 	}
-
+	//Declared necessary variables.
 	bucketName := "bhuvana-firstbucket"
 	uploader := s3manager.NewUploader(sess)
-	filename := "1.png"
+	filename := "flower.txt"
 
-	err = UploadFile(uploader, "1.png", bucketName, filename)
+	//Uploadfile function is called.
+	err = UploadFile(uploader, "flower.txt", bucketName, filename)
 	if err != nil {
 		fmt.Printf("Failed to upload file: %v", err)
 	}
-
+	//If the file is sucessfully uploaded.
 	fmt.Println("Successfully uploaded file!")
 }
